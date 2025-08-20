@@ -9,7 +9,6 @@ import datetime
 import asyncio
 from io import BytesIO
 
-# --- Database Connection ---
 try:
     mongo_client = MongoClient(config.MONGO_URI)
     db = mongo_client["TicketBotDB"]
@@ -19,7 +18,6 @@ except Exception as e:
     print(f"Cog: Error connecting to MongoDB: {e}")
     tickets_collection = None
 
-# --- UI Components (Buttons and Views) ---
 
 class CloseTicketView(View):
     def __init__(self):
@@ -35,7 +33,6 @@ class CloseTicketView(View):
             log_channel = interaction.guild.get_channel(config.LOG_CHANNEL_ID)
             
             if log_channel:
-                # --- ✅ New HTML Transcript Generation ---
                 messages = [msg async for msg in interaction.channel.history(limit=None, oldest_first=True)]
                 
                 # Start building the HTML string with CSS for styling
@@ -67,7 +64,6 @@ class CloseTicketView(View):
                         </div>
                 """
                 
-                # Loop through messages and add them to the HTML
                 for msg in messages:
                     author_name = msg.author.display_name
                     avatar_url = msg.author.display_avatar.url
@@ -83,7 +79,6 @@ class CloseTicketView(View):
                                 </div>
                                 <div class="text">{msg.content}</div>
                     """
-                    # Add attachments if they exist
                     if msg.attachments:
                         for attachment in msg.attachments:
                             if attachment.content_type.startswith('image/'):
@@ -93,10 +88,8 @@ class CloseTicketView(View):
 
                     html_content += "</div></div>"
 
-                # Close the HTML document
                 html_content += "</div></body></html>"
                 
-                # Create and send the HTML file
                 transcript_file = File(
                     BytesIO(html_content.encode('utf-8')),
                     filename=f"transcript-{interaction.channel.name}.html"
