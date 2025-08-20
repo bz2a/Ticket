@@ -1,4 +1,3 @@
-# cogs/ticket_system.py
 import nextcord
 from nextcord.ext import commands
 from nextcord import Interaction, SlashOption, File, PermissionOverwrite
@@ -35,7 +34,6 @@ class CloseTicketView(View):
             if log_channel:
                 messages = [msg async for msg in interaction.channel.history(limit=None, oldest_first=True)]
                 
-                # Start building the HTML string with CSS for styling
                 html_content = f"""
                 <!DOCTYPE html>
                 <html>
